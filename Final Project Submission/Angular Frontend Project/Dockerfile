@@ -1,14 +1,15 @@
-### STAGE 1: Build ### FROM  node  AS  buil... by Bhavya jain
-
-### STAGE 1: Build ###
+# stage 1
 FROM node:12.18-alpine as build-step
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm install
 COPY . .
-RUN npm run build
-### STAGE 2: Run ###
-FROM nginx
+RUN npm run build --prod
+
+#stage 2
+FROM nginx:alpine as prod-stage
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-step /app/dist/library-webUI /usr/share/nginx/html
 EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
