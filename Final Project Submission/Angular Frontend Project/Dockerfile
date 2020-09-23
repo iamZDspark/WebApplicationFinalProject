@@ -8,6 +8,7 @@ RUN npm run build --prod
 
 #stage 2
 FROM nginx:alpine as prod-stage
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-step /app/dist/library-webUI /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
